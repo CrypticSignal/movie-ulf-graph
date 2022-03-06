@@ -45,7 +45,7 @@ const App = () => {
         }
       }
 
-      var trace1 = {
+      const trace1 = {
         x: xVals,
         y: yVals,
         mode: isChecked ? "" : "markers",
@@ -68,7 +68,7 @@ const App = () => {
     <Container>
       {data ? (
         <div>
-          <Checkbox onChange={handleCheckbox} label="Line Graph?" />
+          <Checkbox onChange={handleCheckbox} label="Line Graph" />
 
           <Dropdown
             value={selectedMovie}
@@ -77,9 +77,21 @@ const App = () => {
             fluid
             search
             selection
-            options={options}
+            options={dropdownOptions}
           />
-          <Plot data={plotData} />
+          <Plot
+            data={plotData}
+            layout={{
+              xaxis: {
+                tickmode: "linear",
+                title: "Frequency (Hz)",
+              },
+              yaxis: {
+                tickmode: "linear",
+                title: "dBFS",
+              },
+            }}
+          />
         </div>
       ) : (
         <p>Loading data...</p>
