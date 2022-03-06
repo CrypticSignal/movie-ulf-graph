@@ -7,7 +7,7 @@ let dropdownOptions = [];
 const App = () => {
   const [data, setData] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState("");
-  const [plotData, setPlotData] = useState({});
+  const [plotData, setPlotData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
@@ -66,10 +66,9 @@ const App = () => {
 
   return (
     <Container textAlign="center">
-      {data ? (
+      {data.length ? (
         <div>
           <Checkbox onChange={handleCheckbox} label="Line Graph" />
-
           <Dropdown
             value={selectedMovie}
             placeholder="Select Movie"
@@ -82,8 +81,9 @@ const App = () => {
           <Plot
             data={plotData}
             layout={{
+              autosize: true,
               xaxis: {
-                tickmode: "linear",
+                tickmode: "auto",
                 title: "Frequency (Hz)",
               },
               yaxis: {
@@ -91,6 +91,8 @@ const App = () => {
                 title: "dBFS",
               },
             }}
+            style={{ width: "100%", height: "100%" }}
+            useResizeHandler={true}
           />
         </div>
       ) : (
