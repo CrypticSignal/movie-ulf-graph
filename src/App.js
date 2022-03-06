@@ -54,7 +54,7 @@ const App = () => {
 
       setPlotData([trace1]);
     }
-  }, [selectedMovie, isChecked]);
+  }, [selectedMovie, isChecked, data]);
 
   const handleCheckbox = (e, { checked }) => {
     setIsChecked(checked);
