@@ -65,7 +65,7 @@ const App = () => {
   };
 
   return (
-    <Container>
+    <Container textAlign="center">
       {data ? (
         <div>
           <Checkbox onChange={handleCheckbox} label="Line Graph" />
