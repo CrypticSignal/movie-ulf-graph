@@ -6,7 +6,7 @@ let dropdownOptions = [];
 
 const App = () => {
   const [data, setData] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState("");
+  const [selectedMovies, setSelectedMovies] = useState([]);
   const [plotData, setPlotData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
@@ -24,44 +24,50 @@ const App = () => {
     getData();
   }, []);
 
+  const traces = [];
+
   useEffect(() => {
-    if (selectedMovie) {
-      const movieToPlot = data.filter((movie) => movie.name === selectedMovie)[0];
+    if (selectedMovies.length) {
+      selectedMovies.forEach((movie) => {
+        const movieToPlot = data.filter((obj) => obj.name === movie)[0];
 
-      Object.keys(movieToPlot).forEach((key) => {
-        if (movieToPlot[key] === "") {
-          delete movieToPlot[key];
+        Object.keys(movieToPlot).forEach((key) => {
+          if (movieToPlot[key] === "") {
+            delete movieToPlot[key];
+          }
+        });
+
+        const xVals = Object.keys(movieToPlot);
+        const yVals = Object.values(movieToPlot);
+        xVals.pop();
+        yVals.pop();
+
+        for (let i = 0; i < yVals.length; i++) {
+          if (yVals[i] === "") {
+            yVals[i] = 0;
+          }
         }
+
+        const trace = {
+          x: xVals,
+          y: yVals,
+          mode: isChecked ? "" : "markers",
+          type: "scatter",
+          name: movie,
+        };
+
+        traces.push(trace);
+        setPlotData(traces);
       });
-
-      const xVals = Object.keys(movieToPlot);
-      const yVals = Object.values(movieToPlot);
-      xVals.pop();
-      yVals.pop();
-
-      for (let i = 0; i < yVals.length; i++) {
-        if (yVals[i] === "") {
-          yVals[i] = 0;
-        }
-      }
-
-      const trace1 = {
-        x: xVals,
-        y: yVals,
-        mode: isChecked ? "" : "markers",
-        type: "scatter",
-      };
-
-      setPlotData([trace1]);
     }
-  }, [selectedMovie, isChecked, data]);
+  }, [selectedMovies, isChecked]);
 
   const handleCheckbox = (e, { checked }) => {
     setIsChecked(checked);
   };
 
   const handleMovieSelected = (event, { value }) => {
-    setSelectedMovie(value);
+    setSelectedMovies(value);
   };
 
   return (
@@ -70,10 +76,10 @@ const App = () => {
         <div>
           <Checkbox onChange={handleCheckbox} label="Line Graph" />
           <Dropdown
-            value={selectedMovie}
             placeholder="Select Movie"
             onChange={handleMovieSelected}
             fluid
+            multiple
             search
             selection
             options={dropdownOptions}
