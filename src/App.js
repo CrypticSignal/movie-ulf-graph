@@ -10,26 +10,27 @@ const App = () => {
   const [plotData, setPlotData] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
 
+  const traces = [];
+
   useEffect(() => {
     async function getData() {
       const res = await fetch(
-        "https://opensheet.elk.sh/1T-Ti5e1d8H00-dJYqKU1dKcMsPBNUoHCWvC9c19zBIo/Sheet1"
+        "https://opensheet.elk.sh/1FtsyTbEbt38XZELeVtqGwCACAQO-hDIRz8HoxiSGbdU/Movies"
       );
-      const jsonData = await res.json();
-      jsonData.forEach((movie) => {
-        dropdownOptions.push({ key: movie.name, value: movie.name, text: movie.name });
+      const moviesData = await res.json();
+      moviesData.shift();
+      moviesData.forEach((movie) => {
+        dropdownOptions.push({ key: movie.Movie, value: movie.Movie, text: movie.Movie });
       });
-      setData(jsonData);
+      setData(moviesData);
     }
     getData();
   }, []);
 
-  const traces = [];
-
   useEffect(() => {
     if (selectedMovies.length) {
       selectedMovies.forEach((movie) => {
-        const movieToPlot = data.filter((obj) => obj.name === movie)[0];
+        const movieToPlot = data.filter((obj) => obj.Movie === movie)[0];
 
         Object.keys(movieToPlot).forEach((key) => {
           if (movieToPlot[key] === "") {
